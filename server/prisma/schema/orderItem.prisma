@@ -1,0 +1,10 @@
+model OrderItem {
+    id         String      @id @default(cuid())
+    orderId    String
+    medicineId String
+    quantity   Int
+    order      Order    @relation(fields: [orderId], references: [id])
+    medicine   Medicine @relation(fields: [medicineId], references: [id])
+
+    @@unique([orderId, medicineId])
+}
