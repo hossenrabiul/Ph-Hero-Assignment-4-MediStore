@@ -13,6 +13,12 @@ export interface Pagination {
   sortBy?: string;
 }
 
+export interface Order {
+  quantity: number;
+  medicine: {
+    price: number;
+  };
+}
 export const createProductSchema = z.object({
   name: z.string().min(1, "Name is required"),
   stock: z.number().int().nonnegative("Stock must be more than 1"),

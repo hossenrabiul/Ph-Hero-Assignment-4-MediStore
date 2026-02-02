@@ -2,16 +2,26 @@ import { OrderStatus } from "../../constants/productStatus";
 import { prisma } from "../../lib/prisma";
 
 const addToCart = async (customerId: string, medicineId: string) => {
+  // check if the order exist
   const existOrder = await prisma.order.findFirst({
     where: {
       customerId: customerId as string,
       status: OrderStatus.PENDING,
     },
   });
+  // console.log("order",existOrder)
+  const medicine = await prisma.medicine.findUnique({
+    where: {
+      id: medicineId,
+    },
+  });
 
+  if (!medicine) {
+    throw new Error("No Product found");
+  }
   const data = {
     customerId,
-    totalAmount: 0,
+    totalAmount: medicine?.price,
   };
   if (!existOrder) {
     const orderResult = await prisma.order.create({ data });
@@ -23,6 +33,8 @@ const addToCart = async (customerId: string, medicineId: string) => {
         quantity: 1,
       },
     });
+
+    return { orderResult, orderItemResult };
   } else {
     const existingItem = await prisma.orderItem.findFirst({
       where: {
@@ -42,6 +54,31 @@ const addToCart = async (customerId: string, medicineId: string) => {
           },
         },
       });
+
+      const allOrders = await prisma.orderItem.findMany({
+        where: {
+          orderId: existOrder.id,
+        },
+        include: {
+          medicine: true,
+        },
+      });
+
+      const totalAmount = allOrders.reduce(
+        (sum, item) => sum + item?.medicine?.price * item.quantity,
+        0,
+      );
+
+      const updateOrder = await prisma.order.update({
+        where: {
+          id: existOrder.id,
+        },
+        data: {
+          totalAmount,
+        },
+      });
+
+      return { result, updateOrder };
     } else {
       const result = await prisma.orderItem.create({
         data: {
@@ -50,10 +87,44 @@ const addToCart = async (customerId: string, medicineId: string) => {
           quantity: 1,
         },
       });
+
+      const allOrders = await prisma.orderItem.findMany({
+        where: {
+          orderId: existOrder.id,
+        },
+        include: {
+          medicine: true,
+        },
+      });
+
+      const totalAmount = allOrders.reduce(
+        (sum, item) => sum + item?.medicine?.price * item.quantity,
+        0,
+      );
+      return result;
     }
   }
 };
 
+const getCart = async (customerId: string) => {
+  const cart = await prisma.order.findFirst({
+    where: {
+      customerId: customerId,
+      status: OrderStatus.PENDING,
+    },
+    include: {
+      orterItem: {
+        select: {
+          medicine: true,
+        },
+      },
+    },
+  });
+
+  return cart;
+};
+
 export const cartServices = {
   addToCart,
+  getCart,
 };
