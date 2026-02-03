@@ -2,14 +2,16 @@ import { prisma } from "../../lib/prisma";
 import type { Product } from "../../types/product";
 
 const create = async (sellerId: string, body: Product) => {
-  const { name, stock, price, categoryId } = body;
+  const { name, description, image, stock, price, categoryId, bedge } = body;
   const data = {
     name,
-    // description,
+    description,
     stock,
     price,
     categoryId,
     sellerId,
+    image,
+    bedge,
   };
   const product = await prisma.medicine.create({ data });
 
@@ -39,15 +41,21 @@ const deleteById = async (id: string) => {
 const getAll = async ({
   search,
   category,
+  brand,
   take,
   skip,
   sortBy,
+  minPrice,
+  maxPrice,
 }: {
   search: string | undefined;
   category: string | undefined;
+  brand: string | undefined;
   take: number;
   skip: number;
   sortBy: string;
+  minPrice: number;
+  maxPrice: number;
 }) => {
   const conditions = [];
   if (search) {
@@ -62,7 +70,26 @@ const getAll = async ({
       ],
     });
   }
-
+  if (category) {
+    conditions.push({
+      category: {
+        name: category,
+      },
+    });
+  }
+  if (brand) {
+    conditions.push({
+      brand: brand,
+    });
+  }
+  if (maxPrice > 0) {
+    conditions.push({
+      price: {
+        gte: minPrice,
+        lte: maxPrice,
+      },
+    });
+  }
   const result = await prisma.medicine.findMany({
     take: take,
     skip: skip,

@@ -20,7 +20,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello from the MediStore ...");
 });
 
-app.all("/api/v1/auth/*splat", toNodeHandler(auth));
+app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use("/api/v1/", userRoute);
 

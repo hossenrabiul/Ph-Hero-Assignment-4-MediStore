@@ -95,18 +95,22 @@ const deleteById = async (req: Request, res: Response) => {
 
 const getAll = async (req: Request, res: Response) => {
   try {
-    const { search, category } = req.query;
+    const { search, category, brand } = req.query;
 
     const searchType = typeof search === "string" ? search : undefined;
     const categoryType = typeof category === "string" ? category : undefined;
+    const brandType = typeof brand === "string" ? brand : undefined;
 
-    const { take, skip, sortBy } = paginationHelpers(req.query);
+    const { take, skip, sortBy,minPrice, maxPrice } = paginationHelpers(req.query);
     const data = await productService.getAll({
       search: searchType,
       category: categoryType,
+      brand : brandType,
       take,
       skip,
       sortBy,
+      minPrice,
+      maxPrice,
     });
 
     res.status(200).json({

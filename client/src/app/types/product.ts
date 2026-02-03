@@ -14,7 +14,8 @@ export interface Pagination {
   limit?: number;
   sortBy?: string;
   minPrice ?: number,
-  maxPrice ?: number
+  maxPrice ?: number,
+  category : string,
 }
 
 export interface Order {

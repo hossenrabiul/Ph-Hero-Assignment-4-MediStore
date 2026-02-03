@@ -23,7 +23,7 @@ export default function Navbar() {
 
           {/* Nav Links */}
           <nav className="hidden md:flex items-center gap-8">
-            {["Home", "Medicines", "Doctors", "About", "Contact"].map(
+            {["Home", "Medicines", "shop", "About", "Contact"].map(
               (item, index) => (
                 <motion.div
                   key={item}
