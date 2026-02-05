@@ -28,4 +28,4 @@ app.use("/api/v1/category", categoryRoute);
 
 app.use("/api/v1/product", productRoute);
 
-app.use("/api/v1/product/cart", cartRoute);
+app.use("/api/v1/cart", cartRoute);

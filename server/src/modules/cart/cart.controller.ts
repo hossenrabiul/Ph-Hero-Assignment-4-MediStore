@@ -5,7 +5,7 @@ const addToCart = async (req: Request, res: Response) => {
   try {
     const customerId = req?.user?.id;
     const medicineId = req.params.id;
-
+    console.log(medicineId)
     const result = await cartServices.addToCart(
       customerId as string,
       medicineId as string,
@@ -26,6 +26,7 @@ const addToCart = async (req: Request, res: Response) => {
 };
 
 const getCart = async (req: Request, res: Response) => {
+  console.log("Yes")
   try {
     const customerId = req?.user?.id;
     console.log(customerId)

@@ -1,7 +1,25 @@
+"use client";
+
 import Image from "next/image";
 import { Product } from "../../types/product";
+import { toast } from "sonner";
+import { addProduct } from "../../actions/product.action";
+import Link from "next/link";
 
-export default function ProductCard({ item } : {item : Product}) {
+export default function ProductCard({ item }: { item: Product }) {
+  const handleCart = async (id: string) => {
+    // console.log(id);
+    const toastId = toast.loading("Product is adding", {
+      position: "top-right",
+    });
+
+    const productResult = await addProduct(id);
+    if (productResult.success) {
+      toast.success("Product added to cart", { id: toastId });
+    } else {
+      toast.error(productResult.message, { id: toastId });
+    }
+  };
   return (
     <div className="group bg-white border rounded overflow-hidden transition duration-300">
       {/* Image */}
@@ -43,12 +61,17 @@ export default function ProductCard({ item } : {item : Product}) {
 
         {/* Buttons */}
         <div className="flex gap-2 pt-2">
-          <button className="flex-1 bg-blue-600 text-white text-sm py-2 rounded-lg hover:bg-blue-700 transition">
+          <button
+            onClick={() => handleCart(item.id)}
+            className="flex-1 bg-blue-600 text-white text-sm py-2 rounded-lg hover:bg-blue-700 transition"
+          >
             Buy Now
           </button>
-          <button className="flex-1 border border-gray-300 text-gray-700 text-sm py-2 rounded-lg hover:bg-gray-100 transition">
-            Details
-          </button>
+          <Link href={`/shop/${item.id}`} className="flex-1 flex items-center justify-center border rounded-lg border-gray-300 text-gray-700 text-sm hover:bg-gray-100 transition">
+            <button className="">
+              Details
+            </button>
+          </Link>
         </div>
       </div>
     </div>

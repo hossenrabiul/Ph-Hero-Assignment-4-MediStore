@@ -38,7 +38,7 @@ const bestSellers = [
     badge: "New",
   },
   {
-    id: 4,
+    id: 5,
     name: "Multivitamin Capsules",
     image: "/product-v1-1.jpg",
     price: 699,

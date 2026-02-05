@@ -101,7 +101,7 @@ const getAll = async (req: Request, res: Response) => {
     const categoryType = typeof category === "string" ? category : undefined;
     const brandType = typeof brand === "string" ? brand : undefined;
 
-    const { take, skip, sortBy,minPrice, maxPrice } = paginationHelpers(req.query);
+    const { take, skip, sortBy,minPrice, maxPrice, page, limit } = paginationHelpers(req.query);
     const data = await productService.getAll({
       search: searchType,
       category: categoryType,
@@ -111,6 +111,8 @@ const getAll = async (req: Request, res: Response) => {
       sortBy,
       minPrice,
       maxPrice,
+      page,
+      limit,
     });
 
     res.status(200).json({
@@ -130,6 +132,7 @@ const getAll = async (req: Request, res: Response) => {
 const getById = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
+
     const exitProduct = await prisma.medicine.findUnique({
       where: {
         id: productId as string,
@@ -138,7 +141,7 @@ const getById = async (req: Request, res: Response) => {
     if (!exitProduct) {
       return res.status(400).json({
         success: false,
-        message: "No product found",
+        message: "No product founddd",
       });
     }
 

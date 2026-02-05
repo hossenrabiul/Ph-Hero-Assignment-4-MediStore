@@ -1,6 +1,6 @@
 model Order {
     id          String         @id @default(cuid())
-    customerId  String
+    customerId  String 
     status      OrderStatus @default(PENDING)
     totalAmount Decimal
 

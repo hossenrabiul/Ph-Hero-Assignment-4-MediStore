@@ -1,6 +1,7 @@
 import z, { number } from "zod";
 
 export interface Product {
+  id : string,
   name: string;
   description: string;
   stock: number;
@@ -25,6 +26,11 @@ export interface Order {
   };
 }
 
+export interface categories {
+  id : string
+  name : string,
+  description : string,
+}
 export const createProductSchema = z.object({
   name: z.string().min(1, "Name is required"),
   stock: z.number().int().nonnegative("Stock must be more than 1"),

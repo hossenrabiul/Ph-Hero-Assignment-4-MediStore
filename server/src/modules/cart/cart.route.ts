@@ -4,7 +4,7 @@ import { auth } from "../../middleware/auth";
 
 const route = Router();
 
-route.get("/get-cart",  cartController.getCart);
+route.get("/",auth(),  cartController.getCart);
 
 route.post("/:id", auth(), cartController.addToCart);
 

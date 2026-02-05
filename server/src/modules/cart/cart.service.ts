@@ -15,7 +15,7 @@ const addToCart = async (customerId: string, medicineId: string) => {
       id: medicineId,
     },
   });
-
+  // console.log("first")
   if (!medicine) {
     throw new Error("No Product found");
   }
@@ -101,12 +101,22 @@ const addToCart = async (customerId: string, medicineId: string) => {
         (sum, item) => sum + item?.medicine?.price * item.quantity,
         0,
       );
-      return result;
+
+      const updateOrder = await prisma.order.update({
+        where: {
+          id: existOrder.id,
+        },
+        data: {
+          totalAmount,
+        },
+      });
+      return { result, updateOrder };
     }
   }
 };
 
 const getCart = async (customerId: string) => {
+  console.log("from cart service", customerId);
   const cart = await prisma.order.findFirst({
     where: {
       customerId: customerId,

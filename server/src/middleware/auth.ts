@@ -15,7 +15,7 @@ export const auth = (...roles: string[]) => {
     const session = await better_auth.api.getSession({
       headers: req.headers as any,
     });
-
+    
     if (!session) {
       return res.status(400).json({
         success: false,
@@ -41,7 +41,7 @@ export const auth = (...roles: string[]) => {
         message: "You have no access!",
       });
     }
-    console.log(req.user);
+    // console.log(req.user);
     next();
   };
 };

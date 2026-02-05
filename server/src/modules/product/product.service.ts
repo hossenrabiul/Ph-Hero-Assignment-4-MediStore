@@ -47,6 +47,8 @@ const getAll = async ({
   sortBy,
   minPrice,
   maxPrice,
+  page,
+  limit,
 }: {
   search: string | undefined;
   category: string | undefined;
@@ -56,6 +58,8 @@ const getAll = async ({
   sortBy: string;
   minPrice: number;
   maxPrice: number;
+  page : number,
+  limit : number,
 }) => {
   const conditions = [];
   if (search) {
@@ -97,9 +101,7 @@ const getAll = async ({
       AND: conditions,
     },
     orderBy: {
-      [sortBy]: {
-        name: "asc",
-      },
+      [sortBy]: 'desc',
       // category: 'asc'
     },
     include: {
@@ -111,7 +113,13 @@ const getAll = async ({
     },
   });
 
-  return result;
+  const count = await prisma.medicine.count({
+    where : {
+      AND : conditions
+    }
+  })
+
+  return {result, count, skip, page, limit};
 };
 
 const getById = async (id: string) => {

@@ -6,7 +6,7 @@ import { userRole } from "../../constants/userRole";
 const route = Router();
 
 route.get("/",auth(), productController.getAll);
-route.get("/:id", productController.getById);
+route.get("/:id",auth(), productController.getById);
 route.post("/", auth(), productController.create);
 route.put("/:id", productController.update);
 route.delete("/:id", productController.deleteById);
