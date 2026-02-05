@@ -1,12 +1,15 @@
-
 import Image from "next/image";
 import { Trash2, ShieldCheck } from "lucide-react";
 import { ProductService } from "../../services/product.service";
+import EmptyCart from "../../components/shop/emptyCart";
 
 export default async function CartPage() {
   const cartData = await ProductService.getCart();
-  const { orterItem, totalAmount, status } = cartData.data;
-  
+  if (!cartData.success) {
+    return <EmptyCart />;
+  }
+  const { orterItem, totalAmount, status } = cartData?.data;
+
   return (
     <section className="max-w-7xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-semibold mb-8">Shopping Cart</h1>
@@ -16,7 +19,7 @@ export default async function CartPage() {
         <div className="lg:col-span-2 space-y-6">
           {orterItem?.map((item) => (
             <div
-              key={item.id}
+              key={item.medicine.id}
               className="flex gap-6 bg-white rounded-2xl shadow-sm p-6"
             >
               {/* Image */}
@@ -98,5 +101,3 @@ export default async function CartPage() {
     </section>
   );
 }
-
-

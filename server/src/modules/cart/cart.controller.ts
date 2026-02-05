@@ -26,11 +26,17 @@ const addToCart = async (req: Request, res: Response) => {
 };
 
 const getCart = async (req: Request, res: Response) => {
-  console.log("Yes")
+  
   try {
     const customerId = req?.user?.id;
     console.log(customerId)
     const result = await cartServices.getCart(customerId as string);
+    if(result == null){
+      return res.status(200).json({
+        success : false,
+        data : null
+      })
+    }
     res.status(200).json({
       success: true,
       message: "Retrived cart product",

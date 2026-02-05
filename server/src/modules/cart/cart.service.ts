@@ -116,7 +116,6 @@ const addToCart = async (customerId: string, medicineId: string) => {
 };
 
 const getCart = async (customerId: string) => {
-  console.log("from cart service", customerId);
   const cart = await prisma.order.findFirst({
     where: {
       customerId: customerId,
@@ -130,7 +129,7 @@ const getCart = async (customerId: string) => {
       },
     },
   });
-
+  console.log(cart)
   return cart;
 };
 
